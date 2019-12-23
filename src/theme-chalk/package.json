@@ -1,0 +1,35 @@
+{
+  "name": "theme-chalk",
+  "version": "0.0.1",
+  "description": "component chalk theme.",
+  "main": "lib/index.css",
+  "style": "lib/index.css",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "build": "gulp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "element",
+    "theme"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-cssmin": "^0.1.7",
+    "gulp-sass": "^3.1.0",
+    "gulp-autoprefixer": "^4.1.0"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,47 @@
+/* 设置或检索是否允许用户选中文本。
+ -------------------------- */
+@mixin utils-user-select($value) {
+  -moz-user-select: $value;
+  -webkit-user-select: $value;
+  -ms-user-select: $value;
+}
+
+/* 清除浮动
+ -------------------------- */
+@mixin utils-clearfix {
+  $selector: &;
+
+  @at-root {
+    #{$selector}::before,
+    #{$selector}::after {
+      display: table;
+      content: "";
+    }
+    #{$selector}::after {
+      clear: both
+    }
+  }
+}
+
+/* 垂直居中
+ -------------------------- */
+@mixin utils-vertical-center {
+  $selector: &;
+
+  @at-root {
+    #{$selector}::after {
+      display: inline-block;
+      content: "";
+      height: 100%;
+      vertical-align: middle
+    }
+  }
+}
+
+/* 省略
+ -------------------------- */
+@mixin utils-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

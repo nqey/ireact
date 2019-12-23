@@ -1,0 +1,32 @@
+@import "mixins/mixins";
+@import "common/var";
+
+@include b(banner) {
+    position: relative;
+    z-index: 100;
+    min-width: 1032px;
+    
+    overflow: hidden;
+    background: $--banner-background-color;
+    -webkit-box-shadow: $--box-shadow-base;
+    box-shadow: $--box-shadow-base;
+    background-clip: content-box;
+    @include e(inner) {
+        position: relative;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        width: 1000px;
+        height: 52px;
+        padding: 0 16px;
+        margin: 0 auto;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-transition: -webkit-transform .3s;
+        transition: -webkit-transform .3s;
+        transition: transform .3s;
+        transition: transform .3s,-webkit-transform .3s;
+    }
+
+}

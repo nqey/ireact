@@ -1,0 +1,54 @@
+@import "config";
+
+/* BEM support Func
+ -------------------------- */
+/* 选择器转字符
+ -------------------------- */
+@function selectorToString($selector) {
+  $selector: inspect($selector);
+  $selector: str-slice($selector, 2, -2);
+  @return $selector;
+}
+
+/* 包含修饰符
+ -------------------------- */
+@function containsModifier($selector) {
+  $selector: selectorToString($selector);
+
+  @if str-index($selector, $modifier-separator) {
+    @return true;
+  } @else {
+    @return false;
+  }
+}
+
+/* 包含场景判断
+ -------------------------- */
+@function containWhenFlag($selector) {
+  $selector: selectorToString($selector);
+
+  @if str-index($selector, '.' + $state-prefix) {
+    @return true
+  } @else {
+    @return false
+  }
+}
+
+/* 包含伪类
+ -------------------------- */
+@function containPseudoClass($selector) {
+  $selector: selectorToString($selector);
+
+  @if str-index($selector, ':') {
+    @return true
+  } @else {
+    @return false
+  }
+}
+
+/* 以上之一
+ -------------------------- */
+@function hitAllSpecialNestRule($selector) {
+
+  @return containsModifier($selector) or containWhenFlag($selector) or containPseudoClass($selector);
+}

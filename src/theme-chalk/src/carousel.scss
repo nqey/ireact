@@ -1,0 +1,161 @@
+@import "mixins/mixins";
+@import "common/var";
+
+@include b(carousel) {
+  position: relative;
+
+  @include m(horizontal) {
+    overflow-x: hidden;
+  }
+
+  @include m(vertical) {
+    overflow-y: hidden;
+  }
+
+  @include e(container) {
+    position: relative;
+    height: 300px;
+  }
+
+  @include e(arrow) {
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    height: $--caroussy-arrow-size;
+    width: $--caroussy-arrow-size;
+    cursor: pointer;
+    transition: .3s;
+    border-radius: 50%;
+    background-color: $--caroussy-arrow-background;
+    color: $--color-white;
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+    text-align: center;
+    font-size: $--caroussy-arrow-font-size;
+
+    @include m(left) {
+      left: 16px;
+    }
+
+    @include m(right) {
+      right: 16px;
+    }
+
+    &:hover {
+      background-color: $--caroussy-arrow-hover-background;
+    }
+
+    & i {
+      cursor: pointer;
+    }
+  }
+
+  @include e(indicators) {
+    position: absolute;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: #{$--index-normal + 1};
+
+    @include m(horizontal) {
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    @include m(vertical) {
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    @include m(outside) {
+      bottom: #{$--caroussy-indicator-height + $--caroussy-indicator-padding-vertical * 2};
+      text-align: center;
+      position: static;
+      transform: none;
+      .sy-carousel__indicator:hover button {
+        opacity: 0.64;
+      }
+      button {
+        background-color: $--caroussy-indicator-out-color;
+        opacity: 0.24;
+      }
+    }
+
+    @include m(labels) {
+      left: 0;
+      right: 0;
+      transform: none;
+      text-align: center;
+
+      .sy-carousel__button {
+        height: auto;
+        width: auto;
+        padding: 2px 18px;
+        font-size: 12px;
+      }
+
+      .sy-carousel__indicator {
+        padding: 6px 4px;
+      }
+    }
+  }
+
+  @include e(indicator) {
+    background-color: transparent;
+    cursor: pointer;
+
+    &:hover button {
+      opacity: 0.72;
+    }
+
+    @include m(horizontal) {
+      display: inline-block;
+      padding: $--caroussy-indicator-padding-vertical $--caroussy-indicator-padding-horizontal;
+    }
+
+    @include m(vertical) {
+      padding: $--caroussy-indicator-padding-horizontal $--caroussy-indicator-padding-vertical;
+      .sy-carousel__button {
+        width: $--caroussy-indicator-height;
+        height: #{$--caroussy-indicator-width / 2};
+      }
+    }
+
+    @include when(active) {
+      button {
+        opacity: 1;
+      }
+    }
+  }
+
+  @include e(button) {
+    display: block;
+    opacity: 0.48;
+    width: $--caroussy-indicator-width;
+    height: $--caroussy-indicator-height;
+    background-color: $--color-white;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    transition: .3s;
+  }
+}
+
+.caroussy-arrow-left-enter,
+.caroussy-arrow-left-leave-active {
+  transform: translateY(-50%) translateX(-10px);
+  opacity: 0;
+}
+
+.caroussy-arrow-right-enter,
+.caroussy-arrow-right-leave-active {
+  transform: translateY(-50%) translateX(10px);
+  opacity: 0;
+}

@@ -1,0 +1,99 @@
+@import "var";
+
+.fade-in-linear-enter-active,
+.fade-in-linear-leave-active {
+  transition: $--fade-linear-transition;
+}
+.fade-in-linear-enter,
+.fade-in-linear-leave,
+.fade-in-linear-leave-active {
+  opacity: 0;
+}
+
+.sy-fade-in-linear-enter-active,
+.sy-fade-in-linear-leave-active {
+  transition: $--fade-linear-transition;
+}
+.sy-fade-in-linear-enter,
+.sy-fade-in-linear-leave,
+.sy-fade-in-linear-leave-active {
+  opacity: 0;
+}
+
+.sy-fade-in-enter-active,
+.sy-fade-in-leave-active {
+  transition: all .3s cubic-bezier(.55,0,.1,1);
+}
+.sy-fade-in-enter,
+.sy-fade-in-leave-active {
+  opacity: 0;
+}
+
+.sy-zoom-in-center-enter-active,
+.sy-zoom-in-center-leave-active {
+  transition: all .3s cubic-bezier(.55,0,.1,1);
+}
+.sy-zoom-in-center-enter,
+.sy-zoom-in-center-leave-active {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.sy-zoom-in-top-enter-active,
+.sy-zoom-in-top-leave-active {
+  opacity: 1;
+  transform: scaleY(1);
+  transition: $--md-fade-transition;
+  transform-origin: center top;
+}
+.sy-zoom-in-top-enter,
+.sy-zoom-in-top-leave-active {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.sy-zoom-in-bottom-enter-active,
+.sy-zoom-in-bottom-leave-active {
+  opacity: 1;
+  transform: scaleY(1);
+  transition: $--md-fade-transition;
+  transform-origin: center bottom;
+}
+.sy-zoom-in-bottom-enter,
+.sy-zoom-in-bottom-leave-active {
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+.sy-zoom-in-left-enter-active,
+.sy-zoom-in-left-leave-active {
+  opacity: 1;
+  transform: scale(1, 1);
+  transition: $--md-fade-transition;
+  transform-origin: top left;
+}
+.sy-zoom-in-left-enter,
+.sy-zoom-in-left-leave-active {
+  opacity: 0;
+  transform: scale(.45, .45);
+}
+
+.collapse-transition {
+  transition: 0.3s height ease-in-out, 0.3s padding-top ease-in-out, 0.3s padding-bottom ease-in-out;
+}
+.horizontal-collapse-transition {
+  transition: 0.3s width ease-in-out, 0.3s padding-left ease-in-out, 0.3s padding-right ease-in-out;
+}
+
+.sy-list-enter-active,
+.sy-list-leave-active {
+  transition: all 1s;
+}
+.sy-list-enter, .sy-list-leave-active {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.sy-opacity-transition {
+  transition: opacity .3s cubic-bezier(.55,0,.1,1);
+}

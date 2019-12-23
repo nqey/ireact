@@ -1,0 +1,156 @@
+@import "./common/var.scss";
+@import "./mixins/mixins.scss";
+
+[class*="sy-col-"] {
+  float: left;
+  box-sizing: border-box;
+}
+
+.sy-col-0 {
+  display: none;
+}
+
+@for $i from 0 through 24 {
+  .sy-col-#{$i} {
+    width: (1 / 24 * $i * 100) * 1%;
+  }
+
+  .sy-col-offset-#{$i} {
+    margin-left: (1 / 24 * $i * 100) * 1%;
+  }
+
+  .sy-col-pull-#{$i} {
+    position: relative;
+    right: (1 / 24 * $i * 100) * 1%;
+  }
+
+  .sy-col-push-#{$i} {
+    position: relative;
+    left: (1 / 24 * $i * 100) * 1%;
+  }
+}
+
+@include res(xs) {
+  .sy-col-xs-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .sy-col-xs-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-xs-offset-#{$i} {
+      margin-left: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-xs-pull-#{$i} {
+      position: relative;
+      right: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-xs-push-#{$i} {
+      position: relative;
+      left: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include res(sm) {
+  .sy-col-sm-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .sy-col-sm-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-sm-offset-#{$i} {
+      margin-left: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-sm-pull-#{$i} {
+      position: relative;
+      right: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-sm-push-#{$i} {
+      position: relative;
+      left: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include res(md) {
+  .sy-col-md-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .sy-col-md-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-md-offset-#{$i} {
+      margin-left: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-md-pull-#{$i} {
+      position: relative;
+      right: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-md-push-#{$i} {
+      position: relative;
+      left: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include res(lg) {
+  .sy-col-lg-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .sy-col-lg-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-lg-offset-#{$i} {
+      margin-left: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-lg-pull-#{$i} {
+      position: relative;
+      right: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-lg-push-#{$i} {
+      position: relative;
+      left: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
+
+@include res(xl) {
+  .sy-col-xl-0 {
+    display: none;
+  }
+  @for $i from 0 through 24 {
+    .sy-col-xl-#{$i} {
+      width: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-xl-offset-#{$i} {
+      margin-left: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-xl-pull-#{$i} {
+      position: relative;
+      right: (1 / 24 * $i * 100) * 1%;
+    }
+
+    .sy-col-xl-push-#{$i} {
+      position: relative;
+      left: (1 / 24 * $i * 100) * 1%;
+    }
+  }
+}
