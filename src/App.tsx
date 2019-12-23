@@ -12,7 +12,7 @@ const App: React.FC = () => {
           <Row gutter={10}>
             <Col xs={8} sm={6} md={4} lg={6} xl={1}>
               <div className="grid-content bg-purple">
-                <Button circle>默认按钮</Button>
+                <Button circle loading>默认按钮</Button>
                 <Button type="primary">主要按钮</Button>
                 <Button type="success">成功按钮</Button>
                 <Button type="info">信息按钮</Button>

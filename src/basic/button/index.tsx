@@ -14,10 +14,11 @@ interface IProps {
   onClick?: () => void
 }
 
-const Button: React.FC<IProps> = (props) => {
+const Button: React.FC<IProps> = props => {
   const { 
     type = 'default',
     size,
+    icon,
     disabled,
     loading,
     plain,
@@ -41,6 +42,13 @@ const Button: React.FC<IProps> = (props) => {
   classNameObj[`sy-button--${size}`] = !!size
   
   const className = classnames(classNameObj)
+
+  const loadingEl = (
+    <i className="sy-icon-loading"></i>
+  )
+  const iconLoadingEl = (
+    <i className={icon}></i>
+  )
   return (
      <button
         onClick={onClick}
@@ -48,6 +56,8 @@ const Button: React.FC<IProps> = (props) => {
         type={nativeType}
         className={className}
       >
+        {loading ? loadingEl : ''}
+        {loading && icon ? iconLoadingEl : ''}
         <span>{children}</span>
       </button>
   )
