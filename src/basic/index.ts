@@ -5,7 +5,7 @@ import Footer from './footer';
 import Aside from './aside';
 import Row from './row';
 import Col from './col';
-
+import Button from './button';
 
 export {
   Container,
@@ -14,5 +14,6 @@ export {
   Footer,
   Aside,
   Row,
-  Col
+  Col,
+  Button
 }

@@ -1,16 +1,16 @@
 import React from 'react'
-import ISlotProps from 'src/lib/slot'
 
-interface IProps extends ISlotProps{
+interface IProps {
   width?: string
 }
 
-const Aside: React.FC<IProps> = (props: IProps) => {
+const Aside: React.FC<IProps> = (props) => {
+  const {width = '300px', children} = props
   return (
     <aside className="sy-aside" style={{
-      'width': props.width || '300px'
+      width
     }}>
-      {props.children}
+      {children}
     </aside>
   )
 }

@@ -1,7 +1,19 @@
 import React from 'react'
-import ISlotProps from 'src/lib/slot'
 
-interface IProps extends ISlotProps {
+const style = (gutter?: number): object => {
+  const ret: {
+    paddingLeft?: string
+    paddingRight?: string
+  } = {};
+
+  if (gutter) {
+    ret.paddingLeft = `${gutter / 2}px`;
+    ret.paddingRight = ret.paddingLeft;
+  }
+  return ret;
+}
+
+interface IProps {
   span?: number
   tag?: string
   offset?: number
@@ -16,37 +28,25 @@ interface IProps extends ISlotProps {
   [propName: string]: any;
 }
 
-const Col = (props: IProps) => {
-  const span: number = props.span || 24
-  const tag: string = props.tag || 'div'
-  const gutter: number = props.gutter || props.params.gutter || 0
-  console.log('--------col----------',props)
-  interface IStyle {
-    paddingLeft?: string
-    paddingRight?: string
-  }
+const Col: React.FC<IProps> = (props) => {
+  const {
+    span = 24,
+    tag = 'div',
+    offset = 0,
+    pull = 0,
+    push = 0,
+    gutter = props.params.gutter || 0,
+    children
+  } = props
 
-  let classList: Array<string> = [];
-  let style:IStyle = {};
+  let classList: Array<string> = ['sy-col'];
 
-  if (gutter) {
-    style.paddingLeft = gutter / 2 + 'px';
-    style.paddingRight = style.paddingLeft;
-  }
+  if (span) classList.push(`sy-col-${span}`)
+  if (offset) classList.push(`sy-col-offset-${offset}`)
+  if (pull) classList.push(`sy-col-pull-${pull}`)
+  if (push) classList.push(`sy-col-push-${push}`)
 
-  const actions = ['span', 'offset', 'pull', 'push']
-
-  actions.forEach((prop): void => {
-    if (props[prop] || props[prop] === 0) {
-      classList.push(
-        prop !== 'span'
-          ? `sy-col-${prop}-${span}`
-          : `sy-col-${props[prop]}`
-      )
-    }
-  })
-
-  const sizes = ['xs', 'sm', 'md', 'lg', 'xl']
+  const sizes: Array<string> = ['xs', 'sm', 'md', 'lg', 'xl']
 
   sizes.forEach(size => {
     if (typeof props[size] === 'number') {
@@ -56,8 +56,8 @@ const Col = (props: IProps) => {
       Object.keys(sizeProps).forEach(prop => {
         classList.push(
           prop !== 'span'
-            ? `sy-col-${size}-${prop}-${span}`
-            : `sy-col-${size}-${props[prop]}`
+            ? `sy-col-${size}-${prop}-${sizeProps[prop]}`
+            : `sy-col-${size}-${sizeProps[prop]}`
         )
       })
     }
@@ -65,8 +65,8 @@ const Col = (props: IProps) => {
 
   return React.createElement(tag, {
     className: classList.join(' '),
-    style,
-  }, props.children);
+    style: style(gutter),
+  }, children);
 
 }
 

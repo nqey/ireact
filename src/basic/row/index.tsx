@@ -1,22 +1,12 @@
 import React from 'react'
-import ISlotProps from 'src/lib/slot'
 import classnames from 'src/lib/utils/classnames'
-import setSlotProps from 'src/lib/utils/slotProps'
-
-interface IProps extends ISlotProps {
-  tag?: string
-  gutter?: number
-  type?: string
-  justify?: string
-  align?: string
-}
+import slotProps from 'src/lib/slot/props'
 
 const style = (gutter?: number): object => {
-  interface IRet {
+  const ret: {
     marginLeft?: string
     marginRight?: string
-  }
-  const ret: IRet = {};
+  } = {};
 
   if (gutter) {
     ret.marginLeft = `-${gutter / 2}px`;
@@ -26,29 +16,37 @@ const style = (gutter?: number): object => {
   return ret;
 }
 
-const Row = (props: IProps) => {
-  const tag: string = props.tag || 'div'
-  const justify: string = props.justify || 'start'
-  const align: string = props.align || 'top'
+interface IProps {
+  tag?: string
+  gutter?: number
+  type?: string
+  justify?: 'start'|'end'|'center'|'space-around'|'space-between'
+  align?: 'top'|'middle'|'bottom'
+}
 
-  interface IObj {
-    [propName: string]: any;
-  }
+const Row: React.FC<IProps> = (props) => {
+  const {
+    tag = 'div',
+    gutter = 0,
+    type,
+    justify = 'start',
+    align = 'top',
+  } = props
 
-  const classNameObj:IObj = {}
+  const classNameObj: any = {}
   classNameObj['sy-row'] = true
   classNameObj[`is-justify-${justify}`] = justify !== 'start'
   classNameObj[`is-align-${align}`] = align !== 'top'
-  classNameObj['sy-row--flex'] = props.type === 'flex'
+  classNameObj['sy-row--flex'] = type === 'flex'
   const className = classnames(classNameObj)
   
-  const children = setSlotProps(props.children, {
-    gutter: props.gutter
+  const children = slotProps.set(props.children, {
+    gutter
   })
 
   return React.createElement(tag, {
     className,
-    style: style(props.gutter),
+    style: style(gutter),
   }, children);
 }
 

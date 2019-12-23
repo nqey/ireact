@@ -1,19 +1,19 @@
 import React from 'react'
-import ISlotProps from 'src/lib/slot'
 import classnames from 'src/lib/utils/classnames'
 
-interface IProps extends ISlotProps {
-  direction?: string
+interface IProps {
+  direction?: 'horizontal'|'vertical'
 }
 
-const Container: React.FC<IProps> = (props: IProps) => {
+const Container: React.FC<IProps> = (props) => {
+  const { direction, children } = props
   const classNames = classnames({
     'sy-container': true,
-    'is-vertical': props.direction === 'vertical'
+    'is-vertical': direction === 'vertical'
   })
   return (
     <section className={classNames}>
-      {props.children}
+      {children}
     </section>
   )
 }

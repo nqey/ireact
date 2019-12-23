@@ -1,16 +1,16 @@
 import React from 'react'
-import ISlotProps from 'src/lib/slot'
 
-interface IProps extends ISlotProps{
+interface IProps {
   height?: string
 }
 
-const Header: React.FC<IProps> = (props: IProps) => {
+const Header: React.FC<IProps> = (props) => {
+  const { height = '60px', children } = props
   return (
     <header className="sy-header" style={{
-      'height': props.height || '60px'
+      'height': height
     }}>
-      {props.children}
+      {children}
     </header>
   )
 }
