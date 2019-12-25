@@ -28,6 +28,14 @@ const App: React.FC = () => {
             } sm={6} md={4} lg={6} xl={1}>
               <div className="grid-content bg-purple">
                 <Progress type="dashboard" percentage={50}></Progress>
+                <Progress type="circle" percentage={0}></Progress>
+                <Progress type="circle" percentage={25}></Progress>
+                <Progress type="circle" percentage={100} status="success"></Progress>
+                <Progress type="circle" percentage={70} status="warning"></Progress>
+                <Progress type="circle" percentage={50} status="exception"></Progress>
+                <Progress percentage={50} color="#f56c6c"></Progress>
+                <Progress percentage={20} color="#e6a23c"></Progress>
+                <Progress percentage={80} color="#5cb87a"></Progress>
               </div>
             </Col>
             <Col xs={8} sm={6} md={4} lg={6} xl={1}>

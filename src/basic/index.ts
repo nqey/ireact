@@ -1,21 +1,9 @@
-import Container from './container';
-import Header from './header';
-import Main from './main';
-import Footer from './footer';
-import Aside from './aside';
-import Row from './row';
-import Col from './col';
-import Button from './button';
-import Progress from './progress';
-
-export {
-  Container,
-  Header,
-  Main,
-  Footer,
-  Aside,
-  Row,
-  Col,
-  Button,
-  Progress
-}
+export { default as Container } from './container';
+export { default as Header } from './header';
+export { default as Main } from './main';
+export { default as Footer } from './footer';
+export { default as Aside } from './aside';
+export { default as Row } from './row';
+export { default as Col } from './col';
+export { default as Button } from './button';
+export { default as Progress } from './progress';

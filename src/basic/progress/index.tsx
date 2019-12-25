@@ -37,19 +37,11 @@ class Progress extends React.Component<IPros> {
   }
 
   get showText() {
-    if (typeof this.props.showText === 'undefined') {
-      return true;
-    } else {
-      return this.props.showText;
-    }
+    return typeof this.props.showText === 'undefined' ? true : this.props.showText
   }
 
   get color() {
-    if (typeof this.props.color === 'undefined') {
-      return '';
-    } else {
-      return this.props.color;
-    }
+    return typeof this.props.color === 'undefined' ? '' : this.props.color;
   }
 
   getCurrentColor = () => {
@@ -182,6 +174,7 @@ class Progress extends React.Component<IPros> {
 
   get iconClass() {
     const { status } = this.props
+    console.log(status)
     const { type } = this
     if (status === 'warning') {
       return 'sy-icon-warning';
@@ -217,6 +210,7 @@ class Progress extends React.Component<IPros> {
     } = this.props
 
     const {
+      iconClass,
       showText,
       type,
       barStyle,
@@ -274,7 +268,7 @@ class Progress extends React.Component<IPros> {
     )
 
     const ProgressTextIcon = (
-      <i className="iconClass"></i>
+      <i className={iconClass}></i>
     )
 
     const ProgressText = (
