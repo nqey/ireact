@@ -6,6 +6,7 @@ import Aside from './aside';
 import Row from './row';
 import Col from './col';
 import Button from './button';
+import Progress from './progress';
 
 export {
   Container,
@@ -15,5 +16,6 @@ export {
   Aside,
   Row,
   Col,
-  Button
+  Button,
+  Progress
 }
