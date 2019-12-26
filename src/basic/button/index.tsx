@@ -11,7 +11,8 @@ interface IProps {
   plain?: boolean,
   round?: boolean,
   circle?: boolean,
-  onClick?: () => void
+  onClick?: () => void,
+  style?: React.CSSProperties
 }
 
 const Button: React.FC<IProps> = props => {
@@ -26,7 +27,8 @@ const Button: React.FC<IProps> = props => {
     circle,
     onClick,
     nativeType = 'button',
-    children
+    children,
+    style
   } = props
 
   const classNameObj: any = {
@@ -55,6 +57,7 @@ const Button: React.FC<IProps> = props => {
         disabled={!!disabled || !!loading}
         type={nativeType}
         className={className}
+        style={style}
       >
         {loading ? loadingEl : ''}
         {loading && icon ? iconLoadingEl : ''}

@@ -174,7 +174,6 @@ class Progress extends React.Component<IPros> {
 
   get iconClass() {
     const { status } = this.props
-    console.log(status)
     const { type } = this
     if (status === 'warning') {
       return 'sy-icon-warning';
