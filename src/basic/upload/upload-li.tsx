@@ -22,7 +22,7 @@ class UploadLi extends React.Component<IPL> {
     const obj:IObj = {}
     obj['sy-upload-list__item'] = true
     obj['is-success'] = true
-    // obj['focusing'] = !!focusing
+    obj['focusing'] = !!this.state.focusing
     return classnames(obj)
   }
 
@@ -35,9 +35,21 @@ class UploadLi extends React.Component<IPL> {
     return classnames(obj)
   }
 
+  focus = () => {
+    this.setState({
+      focusing: true
+    })
+  }
+
+  focusOut = () => {
+    this.setState({
+      focusing: false
+    })
+  }
+
   render() {
     const { file, disabled, onRemove, onPreview, listType } = this.props
-    const { liStyle, iStyle } = this
+    const { liStyle, iStyle, focus, focusOut } = this
 
     const UploadProgress = (
       <Progress
@@ -81,6 +93,9 @@ class UploadLi extends React.Component<IPL> {
       <li
         className={liStyle}
         tabIndex={0}
+        onClick={focus}
+        onFocus={focus}
+        onBlur={focusOut}
       >
         {['picture-card', 'picture'].indexOf(listType) > -1 && Img}
         <a className="sy-upload-list__item-name" onClick={() => onPreview && onPreview(file)}>
