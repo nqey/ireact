@@ -19,9 +19,10 @@ class UploadLi extends React.Component<IPL> {
   }
 
   get liStyle() {
+    const {file } = this.props
     const obj:IObj = {}
     obj['sy-upload-list__item'] = true
-    obj['is-success'] = true
+    obj['is-' + (file.status || 'success')] = true
     obj['focusing'] = !!this.state.focusing
     return classnames(obj)
   }
