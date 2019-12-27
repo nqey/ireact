@@ -12,8 +12,10 @@ export interface UploadFile<T = any> {
   fileName?: string;
   lastModified?: number;
   lastModifiedDate?: Date;
+  percentage?: number;
+  raw?: RcFile;
   url?: string;
-  status?: 'error' | 'success' | 'done' | 'uploading' | 'removed';
+  status?: 'error' | 'success' | 'done' | 'uploading' | 'removed' | 'ready';
   percent?: number;
   thumbUrl?: string;
   originFileObj?: File | Blob;

@@ -13,10 +13,6 @@ import {
 } from 'src/basic';
 import './app.css';
 
-function submitUpload() {
-
-}
-
 function handlePreview() {
 
 }
@@ -69,24 +65,73 @@ const App: React.FC = () => {
               </div>
             </Col>
             <Col xs={8} sm={6} md={4} lg={6} xl={1}>
-              <div className="grid-content bg-purple">col-4</div>
+              <div className="grid-content bg-purple">
+                
+              </div>
             </Col>
           </Row>
           <Row gutter={10}>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-              <Upload
-                action="https://jsonplaceholder.typicode.com/posts/"
-                onPreview={handlePreview}
-                onRemove={handleRemove}
-                fileList={fileList}
-                autoUpload={false}
-                tiggert={
-                  <Button size="small" type="primary">选取文件</Button>
-                }
-                tip={
-                  <div className="sy-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                }>
-              </Upload>
+              <div className="grid-content bg-purple">
+                <Upload
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  onPreview={handlePreview}
+                  onRemove={handleRemove}
+                  fileList={fileList}
+                  autoUpload={false}
+                  tiggert={
+                    <Button size="small" type="primary">选取文件</Button>
+                  }
+                  submit={
+                    <Button size="small" type="primary">开始上传</Button>
+                  }
+                  tip={
+                    <div className="sy-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                  }>
+                </Upload>
+              </div>
+            </Col>
+          </Row>
+          <Row gutter={10}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <div className="grid-content bg-purple">
+                <Upload
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  onPreview={handlePreview}
+                  onRemove={handleRemove}
+
+                  fileList={fileList}
+                  autoUpload={false}
+                  listType="picture"
+                  tiggert={
+                    <Button size="small" type="primary">选取文件</Button>
+                  }
+                  submit={
+                    <Button size="small" type="primary">开始上传</Button>
+                  }
+                  tip={
+                    <div className="sy-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                  }>
+                </Upload>
+              </div>
+            </Col>
+          </Row>
+          <Row gutter={10}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+              <div className="grid-content bg-purple">
+                <Upload
+                  action="https://jsonplaceholder.typicode.com/posts/"
+                  onPreview={handlePreview}
+                  onRemove={handleRemove}
+                  fileList={fileList}
+
+                  autoUpload={false}
+                  listType="picture-card"
+                  tiggert={
+                    <i className="sy-icon-plus"></i>
+                  }>
+                </Upload>
+              </div>
             </Col>
           </Row>
         </Main>

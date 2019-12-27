@@ -62,7 +62,7 @@ export default function upload(option:IUpload) {
         percent = e.loaded / e.total * 100;
       }
       option.onProgress({
-        percent
+        percent: parseInt(percent + '')
       });
     };
   }
@@ -103,5 +103,5 @@ export default function upload(option:IUpload) {
     }
   }
   xhr.send(formData);
-  // return xhr;
+  return xhr;
 }

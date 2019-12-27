@@ -11,6 +11,11 @@
     display: none;
   }
 
+  @include e(submit) {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
   @include e(tip) {
     font-size: 12px;
     color: $--color-text-regular;

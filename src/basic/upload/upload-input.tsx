@@ -6,12 +6,12 @@ interface IP<T = any> {
   action: string // 上传的地址
   headers?: any // 设置上传的请求头部
   multiple?: boolean // 是否支持多选文件
+  reqs:any // 上传序列
   data?: any // 上传时附带的额外参数
-  name?: string // 上传的文件字段名
+  name: string // 上传的文件字段名
   withCredentials?: boolean // 支持发送 cookie 凭证信息
   drag?: boolean // 是否启用拖拽上传 TODO
   accept?: string // 接受上传的文件类型（thumbnail-mode 模式下此参数无效）
-  onPreview?: (file: RcFile) => void // 点击文件列表中已上传的文件时的钩子
   onRemove?: (file: RcFile) => void // 文件列表移除文件时的钩子
   onSuccess?: (res:T, file: RcFile) => void // 文件上传成功时的钩子
   onError?: (err:Error, file: RcFile) => void // 文件上传失败时的钩子
@@ -19,14 +19,15 @@ interface IP<T = any> {
   onChange?: (file: RcFile) => void // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
   onStart?: (file:RcFile) => void
   beforeUpload?: (file:RcFile) => Promise<T> // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
-  listType?: 'text'|'picture'|'picture-card' // 文件列表的类型
-  autoUpload?: boolean // 是否在选取文件后立即进行上传
-  fileList?: Array<T> // 上传的文件列表, 例如: [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg'}]
-  httpRequest?: (o:any) => void // 上传实现
+  listType: 'text'|'picture'|'picture-card' // 文件列表的类型
+  autoUpload: boolean // 是否在选取文件后立即进行上传
+  fileList: Array<UploadFile> // 上传的文件列表, 例如: [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg'}]
+  httpRequest?: (o:any) => {} // 上传实现
   disabled?: boolean // 是否禁用
   limit?: number // 最大允许上传个数
-  onExceed?: (files:Array<UploadFile>) => void // 文件超出个数限制时的钩子
+  onExceed?: (files:Array<RcFile>) => void // 文件超出个数限制时的钩子
   tiggert?: React.ReactNode
+  submit?: React.ReactNode
 }
 
 class UploadInput extends React.Component<IP> {
@@ -36,28 +37,6 @@ class UploadInput extends React.Component<IP> {
   setRef = (node: HTMLInputElement) => {
     this.fileRef = node
   };
-
-  get name() {
-    return this.props.name || 'file'
-  }
-
-  get listType() {
-    return this.props.listType || 'picture'
-  }
-
-  get autoUpload() {
-    if (typeof this.props.autoUpload === 'undefined') {
-      return true
-    }
-    return this.props.autoUpload
-  }
-
-  get fileList() {
-    if (typeof this.props.fileList === 'undefined') {
-      return []
-    }
-    return this.props.fileList
-  }
 
   get httpRequest() {
     if (typeof this.props.httpRequest === 'undefined') {
@@ -70,18 +49,15 @@ class UploadInput extends React.Component<IP> {
     return str.indexOf('image') !== -1;
   }
 
-  uploadFiles(files:Array<UploadFile>) {
-    console.log('-----------uploadFiles-----------')
+  uploadFiles(files:Array<RcFile>) {
     const {
+      autoUpload,
       limit,
       onExceed,
       multiple,
-      onStart
-    } = this.props
-    const {
-      autoUpload,
+      onStart,
       fileList
-    } = this
+    } = this.props
 
     if (limit && fileList.length + files.length > limit) {
       onExceed && onExceed(files);
@@ -101,7 +77,6 @@ class UploadInput extends React.Component<IP> {
   }
 
   upload(rawFile:RcFile) {
-    console.log('-----------upload-----------')
     const {
       fileRef
     } = this
@@ -148,7 +123,6 @@ class UploadInput extends React.Component<IP> {
   }
 
   post(rawFile:RcFile) {
-    console.log('-----------post-----------', rawFile)
     const {
       headers,
       withCredentials,
@@ -156,10 +130,11 @@ class UploadInput extends React.Component<IP> {
       action,
       onProgress,
       onSuccess,
-      onError
+      onError,
+      reqs,
+      name
     } = this.props
     const {
-      name,
       httpRequest
     } = this
     const options = {
@@ -170,7 +145,6 @@ class UploadInput extends React.Component<IP> {
       filename: name,
       action: action,
       onProgress: (event: { percent: number }) => {
-        console.log('-----------post-percent----------', event.percent)
         onProgress && onProgress(event, rawFile);
       },
       onSuccess: (res:any) => {
@@ -180,11 +154,10 @@ class UploadInput extends React.Component<IP> {
         onError && onError(err, rawFile);
       }
     };
-    const req = httpRequest && httpRequest(options);
+    reqs[rawFile.uid].xhr = httpRequest && httpRequest(options);
   }
 
   handleChange = (e: any) => {
-    console.log('-----------handleChange-----------')
     const files = e.target.files;
 
     if (!files) return;
@@ -198,6 +171,14 @@ class UploadInput extends React.Component<IP> {
     }
   }
 
+  handleSubmit() {
+    const { reqs } = this.props
+    const postFiles: RcFile[] = Object.keys(reqs).map(uid => reqs[uid].raw)
+    postFiles.forEach(file => {
+      this.upload(file);
+    })
+  }
+
   handleKeydown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.target !== e.currentTarget) return;
     if (e.keyCode === 13 || e.keyCode === 32) {
@@ -207,30 +188,39 @@ class UploadInput extends React.Component<IP> {
 
   render() {
     let {
-      name,
-      listType,
       handleChange,
-      uploadFiles,
       handleKeydown,
       setRef
     } = this
     const {
+      listType,
+      name,
       accept,
       multiple,
       disabled,
       drag,
-      tiggert
+      tiggert,
+      submit
     } = this.props
 
+    if (!!disabled) {
+      return (<span></span>)
+    }
+
     return (
-      <div
-        tabIndex={0}
-        className={`sy-upload sy-upload--${listType}`}
-        onClick={() => this.handleClick()}
-        onKeyDown={handleKeydown}
-        >
-        { tiggert }
-        <input ref={setRef} className="sy-upload__input" type="file" name={name} onChange={handleChange} multiple={multiple} accept={accept}></input>
+      <div className="sy-upload">
+        <div
+          tabIndex={0}
+          className={`sy-upload sy-upload--${listType}`}
+          onClick={() => this.handleClick()}
+          onKeyDown={handleKeydown}
+          >
+          { tiggert }
+          <input ref={setRef} className="sy-upload__input" type="file" name={name} onChange={handleChange} multiple={multiple} accept={accept}></input>
+        </div>
+        <div onClick={() => this.handleSubmit()} className="sy-upload sy-upload__submit">
+          { submit }
+        </div>
       </div>
     )
   }
