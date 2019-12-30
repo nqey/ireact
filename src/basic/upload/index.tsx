@@ -254,7 +254,8 @@ class Upload extends React.Component<IP, IS> {
       accept,
       httpRequest,
       limit,
-      onExceed
+      onExceed,
+      drag
     } = this.props
     const {
       listType,
@@ -292,6 +293,7 @@ class Upload extends React.Component<IP, IS> {
           headers={ headers }
           action={ action }
           data={ data }
+          drag= { !!drag }
           reqs={ reqs }
           fileList={ flies }
           tiggert={ tiggert }

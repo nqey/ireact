@@ -78,12 +78,9 @@ const App: React.FC = () => {
                   onPreview={handlePreview}
                   onRemove={handleRemove}
                   fileList={fileList}
-                  autoUpload={false}
+                  drag
                   tiggert={
-                    <Button size="small" type="primary">选取文件</Button>
-                  }
-                  submit={
-                    <Button size="small" type="primary">开始上传</Button>
+                    <i className="sy-icon-plus" style={{lineHeight: '180px'}}></i>
                   }
                   tip={
                     <div className="sy-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -124,8 +121,6 @@ const App: React.FC = () => {
                   onPreview={handlePreview}
                   onRemove={handleRemove}
                   fileList={fileList}
-
-                  autoUpload={false}
                   listType="picture-card"
                   tiggert={
                     <i className="sy-icon-plus"></i>

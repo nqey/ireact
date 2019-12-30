@@ -5,7 +5,7 @@ interface IP {
   children?: React.ReactNode,
   disabled?: boolean,
   accept?: string,
-  onFile?: (files:any) => void
+  onFile: (files:any) => void
 }
 
 interface IS {
@@ -19,21 +19,16 @@ export interface IDropEvent {
 
 class UploadDragger extends React.Component<IP, IS> {
 
-  constructor(props: IP) {
-    super(props);
-    this.onDrop = this.onDrop.bind(this)
-    this.onDragover = this.onDragover.bind(this)
-    this.onDragleave = this.onDragleave.bind(this)
-    this.getClassName = this.getClassName.bind(this)
-    this.state = { dragover: false }
-  }
+  dragover:boolean = false
 
-  onDrop(e: IDropEvent) {
-    const {disabled, accept, onFile=(files:any) => {}} = this.props
-    if (disabled || !accept) return;
-    this.setState({dragover: false});
+  onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    const {disabled, accept, onFile} = this.props
+    if (disabled) return;
+    this.dragover = false;
     if (!accept) {
       onFile(e.dataTransfer.files)
+      
       return;
     }
     onFile([].slice.call(e.dataTransfer.files).filter((file:File) => {
@@ -60,18 +55,21 @@ class UploadDragger extends React.Component<IP, IS> {
     }));
   }
 
-  onDragover() {
+  onDragover = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log('onDragover')
     if (!this.props.disabled) {
-      this.setState({dragover: true});
+      this.dragover = true
     }
+    e.preventDefault()
   }
 
-  onDragleave() {
-    this.setState({dragover: false});
+  onDragleave = () => {
+    console.log('onDragleave')
+    this.dragover = false;
   }
 
-  getClassName() {
-    const { dragover } = this.state
+  get divClassName() {
+    const { dragover } = this
     const classNameObj: any = {
       'sy-upload-dragger': true,
       'is-dragover': dragover
@@ -80,10 +78,10 @@ class UploadDragger extends React.Component<IP, IS> {
   } 
 
   render() {
-    const {onDrop, onDragover, onDragleave, getClassName, props} = this
+    const {onDrop, onDragover, onDragleave, divClassName, props} = this
     return (
       <div
-        className={getClassName()}
+        className={divClassName}
         onDrop={onDrop}
         onDragOver={onDragover}
         onDragLeave={onDragleave}

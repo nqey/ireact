@@ -1,5 +1,6 @@
 import React from 'react'
 import ajax from './ajax'
+import UploadDragger from './upload-dragger'
 import { RcFile, UploadFile } from './interface'
 
 interface IP<T = any> {
@@ -49,7 +50,7 @@ class UploadInput extends React.Component<IP> {
     return str.indexOf('image') !== -1;
   }
 
-  uploadFiles(files:Array<RcFile>) {
+  uploadFiles = (files:Array<RcFile>) => {
     const {
       autoUpload,
       limit,
@@ -190,7 +191,8 @@ class UploadInput extends React.Component<IP> {
     let {
       handleChange,
       handleKeydown,
-      setRef
+      setRef,
+      uploadFiles
     } = this
     const {
       listType,
@@ -215,7 +217,11 @@ class UploadInput extends React.Component<IP> {
           onClick={() => this.handleClick()}
           onKeyDown={handleKeydown}
           >
-          { tiggert }
+          {
+            drag
+              ? <UploadDragger disabled={disabled} accept={accept} onFile={uploadFiles}>{tiggert}</UploadDragger>
+              : tiggert
+          }
           <input ref={setRef} className="sy-upload__input" type="file" name={name} onChange={handleChange} multiple={multiple} accept={accept}></input>
         </div>
         <div onClick={() => this.handleSubmit()} className="sy-upload sy-upload__submit">
