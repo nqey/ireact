@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Main: React.FC = (props) => {
+const Main: React.FC = props => {
   return (
     <main className='sy-main'>
         {props.children}

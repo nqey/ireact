@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import classnames from 'src/lib/utils/classnames'
 
-interface IPros {
+interface IP {
   type?: 'line'|'circle'|'dashboard' //进度条类型
   percentage?: number // 百分比（必填）
   strokeWidth?: number // 进度条的宽度，单位 px
@@ -14,217 +14,120 @@ interface IPros {
   format?: (param:any) => {}
 }
 
-class Progress extends React.Component<IPros> {
+const Progress: React.FC<IP> = props => {
+  const {
+    type = 'line',
+    percentage = 0,
+    strokeWidth = 6,
+    textInside = false,
+    status,
+    color = '',
+    width = 126,
+    strokeLinecap = 'round',
+    showText = true,
+    format
+  } = props
 
-  get percentage() {
-    return this.props.percentage || 0
-  }
-
-  get strokeWidth() {
-    return this.props.strokeWidth || 6
-  }
-
-  get width() {
-    return this.props.width || 126
-  }
-
-  get type() {
-    return this.props.type || 'line'
-  }
-
-  get strokeLinecap() {
-    return this.props.strokeLinecap || 'round'
-  }
-
-  get showText() {
-    return typeof this.props.showText === 'undefined' ? true : this.props.showText
-  }
-
-  get color() {
-    return typeof this.props.color === 'undefined' ? '' : this.props.color;
-  }
-
-  getCurrentColor = () => {
-    const { color, percentage, getLevelColor } = this
+  const getCurrentColor = () => {
     if (typeof color === 'function') {
-      return color(percentage);
+      return color(percentage)
     } else if (typeof color === 'string') {
-      return color;
+      return color
     } else {
-      return getLevelColor();
+      return getLevelColor()
     }
   }
 
-  getLevelColor = () => {
-    const { percentage, getColorArray } = this
-
-    const colorArray = getColorArray().sort((a:any, b:any) => a.percentage - b.percentage);
+  const getLevelColor = () => {
+    const colorArray = getColorArray().sort((a:any, b:any) => a.percentage - b.percentage)
 
     for (let i = 0; i < colorArray.length; i++) {
       if (colorArray[i].percentage > percentage) {
-        return colorArray[i].color;
+        return colorArray[i].color
       }
     }
-    return colorArray[colorArray.length - 1].color;
+    return colorArray[colorArray.length - 1].color
   }
 
-  getColorArray = () => {
-    const { color } = this
-    const span = 100 / color.length;
+  const getColorArray = () => {
+    const span = 100 / color.length
     return color.map((seriesColor:any, index:any) => {
       if (typeof seriesColor === 'string') {
         return {
           color: seriesColor,
           progress: (index + 1) * span
-        };
+        }
       }
-      return seriesColor;
-    });
+      return seriesColor
+    })
   }
 
-  get barStyle() {
-    const { percentage, getCurrentColor } = this
-    const style:any = {};
-    style.width = percentage + '%';
-    style.backgroundColor = getCurrentColor();
-    return style;
+  const barStyle = {
+    width: `${percentage}%`,
+    backgroundColor: getCurrentColor()
   }
-
-  get relativeStrokeWidth() {
-    const { strokeWidth, width } = this
-    return parseFloat((strokeWidth / width * 100).toFixed(1))
+  const relativeStrokeWidth = parseFloat((strokeWidth / width * 100).toFixed(1))
+  const radius = (type === 'circle' || type === 'dashboard') ? parseInt(String(50 - relativeStrokeWidth / 2), 10) : 0
+  const isDashboard = type === 'dashboard'
+  const trackPath = `
+    M 50 50
+    m 0 ${isDashboard ? '' : '-'}${radius}
+    a ${radius} ${radius} 0 1 1 0 ${isDashboard ? '-' : ''}${radius * 2}
+    a ${radius} ${radius} 0 1 1 0 ${isDashboard ? '' : '-'}${radius * 2}
+    `
+  const perimeter = 2 * Math.PI * radius
+  const rate = isDashboard ? 0.75 : 1
+  const strokeDashoffset = `${-1 * perimeter * (1 - rate) / 2}px`
+  const trailPathStyle = {
+    strokeDasharray: `${(perimeter * rate)}px, ${perimeter}px`,
+    strokeDashoffset: strokeDashoffset
   }
-
-  get radius() {
-    const { type, relativeStrokeWidth } = this
-    if (type === 'circle' || type === 'dashboard') {
-      return parseInt(String(50 - relativeStrokeWidth / 2), 10)
-    } else {
-      return 0
-    }
+  const circlePathStyle = {
+    strokeDasharray: `${perimeter * rate * (percentage / 100) }px, ${perimeter}px`,
+    strokeDashoffset: strokeDashoffset,
+    transition: 'stroke-dasharray 0.6s ease 0s, stroke 0.6s ease'
   }
-
-  get trackPath() {
-    const { radius, type } = this
-    const isDashboard = type === 'dashboard';
-    return `
-      M 50 50
-      m 0 ${isDashboard ? '' : '-'}${radius}
-      a ${radius} ${radius} 0 1 1 0 ${isDashboard ? '-' : ''}${radius * 2}
-      a ${radius} ${radius} 0 1 1 0 ${isDashboard ? '' : '-'}${radius * 2}
-      `;
-  }
-
-  get perimeter() {
-    const { radius } = this
-    return 2 * Math.PI * radius;
-  }
-
-  get rate() {
-    const { type } = this
-    return type === 'dashboard' ? 0.75 : 1;
-  }
-
-  get strokeDashoffset() {
-    const { perimeter, rate } = this
-    const offset = -1 * perimeter * (1 - rate) / 2;
-    return `${offset}px`;
-  }
-
-  get trailPathStyle() {
-    const { perimeter, rate, strokeDashoffset } = this
-    return {
-      strokeDasharray: `${(perimeter * rate)}px, ${perimeter}px`,
-      strokeDashoffset: strokeDashoffset
-    }
-  }
-
-  get circlePathStyle() {
-    const { percentage, perimeter, rate, strokeDashoffset } = this
-    return {
-      strokeDasharray: `${perimeter * rate * (percentage / 100) }px, ${perimeter}px`,
-      strokeDashoffset: strokeDashoffset,
-      transition: 'stroke-dasharray 0.6s ease 0s, stroke 0.6s ease'
-    }
-  }
-
-  get stroke() {
-    let ret;
-    const { status } = this.props
-    const { color, getCurrentColor } = this
+  const stroke = (() => {
+    let ret
     if (color) {
-      ret = getCurrentColor();
+      ret = getCurrentColor()
     } else {
       switch (status) {
         case 'success':
-          ret = '#13ce66';
-          break;
+          ret = '#13ce66'
+          break
         case 'exception':
-          ret = '#ff4949';
-          break;
+          ret = '#ff4949'
+          break
         case 'warning':
-          ret = '#e6a23c';
-          break;
+          ret = '#e6a23c'
+          break
         default:
-          ret = '#20a0ff';
+          ret = '#20a0ff'
       }
     }
-    return ret;
-  }
-
-  get iconClass() {
-    const { status } = this.props
-    const { type } = this
+    return ret
+  })()
+  const iconClass = (() => {
     if (status === 'warning') {
-      return 'sy-icon-warning';
+      return 'sy-icon-warning'
     }
     if (type === 'line') {
-      return status === 'success' ? 'sy-icon-circle-check' : 'sy-icon-circle-close';
+      return status === 'success' ? 'sy-icon-circle-check' : 'sy-icon-circle-close'
     } else {
-      return status === 'success' ? 'sy-icon-check' : 'sy-icon-close';
+      return status === 'success' ? 'sy-icon-check' : 'sy-icon-close'
     }
-  }
-
-  get progressTextSize() {
-    const { type, width, strokeWidth } = this
-    return type === 'line'
-      ? 12 + strokeWidth * 0.4
-      : width * 0.111111 + 2 ;
-  }
-
-  get content() {
-    const { format } = this.props
-    const { percentage } = this
+  })()
+  const progressTextSize = type === 'line' ? 12 + strokeWidth * 0.4 : width * 0.111111 + 2 
+  const content = (() => {
     if (typeof format === 'function') {
-      return format(percentage) || '';
+      return format(percentage) || ''
     } else {
-      return `${percentage}%`;
+      return `${percentage}%`
     }
-  }
+  })()
 
-  render() {
-    const {
-      status,
-      textInside
-    } = this.props
-
-    const {
-      iconClass,
-      showText,
-      type,
-      barStyle,
-      content,
-      trackPath,
-      relativeStrokeWidth,
-      stroke,
-      strokeLinecap,
-      percentage,
-      strokeWidth,
-      width,
-      trailPathStyle,
-      circlePathStyle,
-      progressTextSize
-    } = this
+  const renderProgress = () => {
 
     const ProgressLineContent = (
       <div className="sy-progress-bar__innerText">{content}</div>
@@ -279,14 +182,16 @@ class Progress extends React.Component<IPros> {
       </div>
     )
 
-    const classNameObj:any = {}
-    classNameObj['sy-progress'] = true
-    classNameObj['sy-progress--' + type] = true
-    classNameObj['is-' + status] = !!status
-    classNameObj['sy-progress--without-text'] = !showText
-    classNameObj['sy-progress--text-inside'] = !!textInside
+    const progressClassName = (() => {
+      const obj:any = {}
+      obj['sy-progress'] = true
+      obj['sy-progress--' + type] = true
+      obj['is-' + status] = !!status
+      obj['sy-progress--without-text'] = !showText
+      obj['sy-progress--text-inside'] = !!textInside
 
-    const progressClassName = classnames(classNameObj)
+      return classnames(obj)
+    })()
 
     return (
       <div
@@ -297,7 +202,7 @@ class Progress extends React.Component<IPros> {
       </div>
     )
   }
-
+  return renderProgress()
 }
 
 export default Progress

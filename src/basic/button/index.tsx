@@ -31,24 +31,28 @@ const Button: React.FC<IProps> = props => {
     style
   } = props
 
-  const classNameObj: any = {
-    'sy-button': true,
-    'is-disabled': disabled,
-    'is-loading': loading,
-    'is-plain': plain,
-    'is-round': round,
-    'is-circle': circle
-  }
 
-  classNameObj[`sy-button--${type}`] = !!type
-  classNameObj[`sy-button--${size}`] = !!size
+  const buttonStyle = (() => {
+    const obj: any = {
+      'sy-button': true,
+      'is-disabled': !!disabled,
+      'is-loading': !!loading,
+      'is-plain': !!plain,
+      'is-round': !!round,
+      'is-circle': !!circle
+    }
+
+    obj[`sy-button--${type}`] = !!type
+    obj[`sy-button--${size}`] = !!size
+    
+    return classnames(obj)
+  })()
   
-  const className = classnames(classNameObj)
 
-  const loadingEl = (
+  const Loading = (
     <i className="sy-icon-loading"></i>
   )
-  const iconLoadingEl = (
+  const IconLoading = (
     <i className={icon}></i>
   )
   return (
@@ -56,11 +60,11 @@ const Button: React.FC<IProps> = props => {
         onClick={onClick}
         disabled={!!disabled || !!loading}
         type={nativeType}
-        className={className}
+        className={buttonStyle}
         style={style}
       >
-        {loading ? loadingEl : ''}
-        {loading && icon ? iconLoadingEl : ''}
+        {loading && Loading }
+        {loading && icon && IconLoading}
         <span>{children}</span>
       </button>
   )

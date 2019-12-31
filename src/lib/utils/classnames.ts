@@ -1,3 +1,1 @@
-const classnames = (o: any): string => Object.keys(o).filter(i => o[i]).join(' ')
-
-export default classnames
+export default (o: any): string => Object.keys(o).filter(i => o[i]).join(' ')

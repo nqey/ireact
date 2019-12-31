@@ -5,14 +5,13 @@ interface IProps {
   direction?: 'horizontal'|'vertical'
 }
 
-const Container: React.FC<IProps> = (props) => {
+const Container: React.FC<IProps> = props => {
   const { direction, children } = props
-  const classNames = classnames({
+  return (
+    <section className={classnames({
     'sy-container': true,
     'is-vertical': direction === 'vertical'
-  })
-  return (
-    <section className={classNames}>
+    })}>
       {children}
     </section>
   )

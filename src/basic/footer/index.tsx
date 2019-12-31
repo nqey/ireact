@@ -4,13 +4,13 @@ interface IProps {
   height?: string
 }
 
-const Footer: React.FC<IProps> = (props) => {
+const Footer: React.FC<IProps> = props => {
   const { height = '60xp',  children} = props
   return (
     <footer className="sy-footer" style={{
-    	'height': height
+      height
     }}>
-        {children}
+      {children}
     </footer>
   )
 }

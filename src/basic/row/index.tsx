@@ -33,12 +33,12 @@ const Row: React.FC<IProps> = (props) => {
     align = 'top',
   } = props
 
-  const classNameObj: any = {}
-  classNameObj['sy-row'] = true
-  classNameObj[`is-justify-${justify}`] = justify !== 'start'
-  classNameObj[`is-align-${align}`] = align !== 'top'
-  classNameObj['sy-row--flex'] = type === 'flex'
-  const className = classnames(classNameObj)
+  const obj: any = {}
+  obj['sy-row'] = true
+  obj[`is-justify-${justify}`] = justify !== 'start'
+  obj[`is-align-${align}`] = align !== 'top'
+  obj['sy-row--flex'] = type === 'flex'
+  const className = classnames(obj)
   
   const children = slotProps.set(props.children, {
     gutter

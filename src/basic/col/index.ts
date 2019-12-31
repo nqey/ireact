@@ -1,6 +1,6 @@
 import React from 'react'
 
-const style = (gutter?: number): object => {
+const style = (gutter: number): object => {
   const ret: {
     paddingLeft?: string
     paddingRight?: string
@@ -25,10 +25,10 @@ interface IProps {
   lg?: number|object
   xl?: number|object
   gutter?: number
-  [propName: string]: any;
+  readonly [index: string]: any;
 }
 
-const Col: React.FC<IProps> = (props) => {
+const Col: React.FC<IProps> = props => {
   const {
     span = 24,
     tag = 'div',
@@ -39,12 +39,11 @@ const Col: React.FC<IProps> = (props) => {
     children
   } = props
 
-  let classList: Array<string> = ['sy-col'];
-
-  if (span) classList.push(`sy-col-${span}`)
-  if (offset) classList.push(`sy-col-offset-${offset}`)
-  if (pull) classList.push(`sy-col-pull-${pull}`)
-  if (push) classList.push(`sy-col-push-${push}`)
+  let classList: Array<string> = ['sy-col']
+  classList.push(`sy-col-${span}`)
+  classList.push(`sy-col-offset-${offset}`)
+  classList.push(`sy-col-pull-${pull}`)
+  classList.push(`sy-col-push-${push}`)
 
   const sizes: Array<string> = ['xs', 'sm', 'md', 'lg', 'xl']
 
