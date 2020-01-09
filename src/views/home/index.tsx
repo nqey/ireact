@@ -67,7 +67,7 @@ const Home: React.FC = () => {
               </div>
             </Col>
             <Col xs={8} sm={6} md={4} lg={6} xl={1}>
-                  <Steps direction="horizontal" simple active={1} space={100}>
+                  <Steps direction="horizontal" active={1} space={100}>
                     <Step title="步骤 1"></Step>
                     <Step title="步骤 2"></Step>
                     <Step title="步骤 3" description="这是一段很长很长很长的描述性文字"></Step>

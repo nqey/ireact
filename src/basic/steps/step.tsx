@@ -100,9 +100,8 @@ const Step: React.FC<IP> = props => {
       <span>{ description }</span>
     </div>
   )
-
   const divIconInner = <div className="sy-step__icon-inner">{ index + 1 }</div>
-
+  const iIcon = <i  className={`sy-step__icon-inner ${icon}`}></i>
   return (
     <div
     style={stepStyle}
@@ -115,13 +114,12 @@ const Step: React.FC<IP> = props => {
         <i className="sy-step__line-inner" style={lineStyle}></i>
       </div>
       <div className={`sy-step__icon is-${icon ? 'icon' : 'text'}`}>
-        {currentStatus !== 'success' && currentStatus !== 'error' && !!icon && <i  className={`sy-step__icon-inner ${icon}`}></i>}
-        {currentStatus !== 'success' && currentStatus !== 'error' && !icon && !isSimple && divIconInner}
         {
-          currentStatus === 'success' || currentStatus === 'error' ?
-          <i className={`sy-step__icon-inner is-status sy-icon-${currentStatus === 'success' ? 'check' : 'close'}`}></i>
+          currentStatus !== 'success' && currentStatus !== 'error'
+          ?
+          !!icon ? iIcon : divIconInner
           :
-          ''
+          <i className={`sy-step__icon-inner is-status sy-icon-${currentStatus === 'success' ? 'check' : 'close'}`}></i>
         }
       </div>
     </div>
