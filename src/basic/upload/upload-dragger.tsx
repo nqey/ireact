@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classnames from 'src/lib/utils/classnames'
 
 interface IP {
@@ -8,77 +8,68 @@ interface IP {
   onFile: (files:any) => void
 }
 
-interface IS {
-  dragover?: boolean
-}
+const UploadDragger: React.FC<IP> = props => {
+  const {
+    children,
+    disabled,
+    accept,
+    onFile
+  } = props
 
-export interface IDropEvent {
-  dataTransfer: DataTransfer
-}
+  const [dragover, setDragover] = useState(false)
 
-
-class UploadDragger extends React.Component<IP, IS> {
-
-  dragover:boolean = false
-
-  onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
-    const {disabled, accept, onFile} = this.props
-    if (disabled) return;
-    this.dragover = false;
+    if (disabled) return
+    setDragover(false)
     if (!accept) {
       onFile(e.dataTransfer.files)
-      
-      return;
+      return
     }
     onFile([].slice.call(e.dataTransfer.files).filter((file:File) => {
-      const { type, name } = file;
+      const { type, name } = file
       const extension = name.indexOf('.') > -1
         ? `.${ name.split('.').pop() }`
-        : '';
-      const baseType = type.replace(/\/.*$/, '');
+        : ''
+      const baseType = type.replace(/\/.*$/, '')
       return accept.split(',')
         .map(type => type.trim())
         .filter(type => type)
         .some(acceptedType => {
           if (/\..+$/.test(acceptedType)) {
-            return extension === acceptedType;
+            return extension === acceptedType
           }
           if (/\/\*$/.test(acceptedType)) {
-            return baseType === acceptedType.replace(/\/\*$/, '');
+            return baseType === acceptedType.replace(/\/\*$/, '')
           }
           if (/^[^\/]+\/[^\/]+$/.test(acceptedType)) {
-            return type === acceptedType;
+            return type === acceptedType
           }
-          return false;
-        });
-    }));
+          return false
+        })
+    }))
   }
 
-  onDragover = (e: React.DragEvent<HTMLDivElement>) => {
-    console.log('onDragover')
-    if (!this.props.disabled) {
-      this.dragover = true
+  const onDragover = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!disabled) {
+      setDragover(true)
     }
     e.preventDefault()
   }
 
-  onDragleave = () => {
-    console.log('onDragleave')
-    this.dragover = false;
+  const onDragleave = () => {
+    setDragover(false)
   }
 
-  get divClassName() {
-    const { dragover } = this
-    const classNameObj: any = {
+  const divClassName = (() => {
+    const obj: any = {
       'sy-upload-dragger': true,
       'is-dragover': dragover
     }
-    return classnames(classNameObj)
-  } 
+    return classnames(obj)
+  })()
 
-  render() {
-    const {onDrop, onDragover, onDragleave, divClassName, props} = this
+  const renderUploadDragger = () => {
     return (
       <div
         className={divClassName}
@@ -86,10 +77,12 @@ class UploadDragger extends React.Component<IP, IS> {
         onDragOver={onDragover}
         onDragLeave={onDragleave}
       >
-        {props.children}
+        {children}
       </div>
     )
   }
+
+  return renderUploadDragger()
 }
 
 export default UploadDragger

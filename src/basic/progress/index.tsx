@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import classnames from 'src/lib/utils/classnames'
 
 interface IP {

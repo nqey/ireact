@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import UploadInput from './upload-input'
 import UploadList from './upload-list'
 import { RcFile, UploadFile } from './interface'
@@ -13,14 +13,15 @@ interface IP<T = any> {
   withCredentials?: boolean // 支持发送 cookie 凭证信息
   drag?: boolean // 是否启用拖拽上传 TODO
   accept?: string // 接受上传的文件类型（thumbnail-mode 模式下此参数无效）
+  onStart?: (file: UploadFile, rawFiles:Array<UploadFile>) => void
   onPreview?: (file: UploadFile, rawFiles:Array<UploadFile>) => void // 点击文件列表中已上传的文件时的钩子
   onRemove?: (file: UploadFile, rawFiles:Array<UploadFile>) => void // 文件列表移除文件时的钩子
   onSuccess?: (res:T, file: RcFile, rawFiles:Array<UploadFile>) => void // 文件上传成功时的钩子
   onError?: (err:Error, file: RcFile, rawFiles:Array<UploadFile>) => void // 文件上传失败时的钩子
   onProgress?: (event: { percent: number }, file: RcFile, rawFiles:Array<UploadFile>) => void // 文件上传时的钩子
   onChange?: (file: RcFile, rawFiles:Array<UploadFile>) => void // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
-  beforeUpload?: (file:RcFile, rawFiles:Array<UploadFile>) => {} // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
-  beforeRemove?: (file:UploadFile, rawFiles:Array<UploadFile>) => Promise<T> // 删除文件之前的钩子，参数为上传的文件和文件列表，若返回 false 或者返回 Promise 且被 reject，则停止删除。
+  beforeUpload?: (file:RcFile, rawFiles:Array<UploadFile>) => Promise<any> // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
+  beforeRemove?: (file:UploadFile, rawFiles:Array<UploadFile>) => Promise<any> // 删除文件之前的钩子，参数为上传的文件和文件列表，若返回 false 或者返回 Promise 且被 reject，则停止删除。
   listType?: 'text'|'picture'|'picture-card' // 文件列表的类型
   autoUpload?: boolean // 是否在选取文件后立即进行上传
   fileList?: Array<T> // 上传的文件列表, 例如: [{name: 'food.jpg', url: 'https://xxx.cdn.com/xxx.jpg'}]
@@ -31,6 +32,7 @@ interface IP<T = any> {
   submit?: React.ReactNode // 触发器
   tiggert?: React.ReactNode // 触发器
   tip?: React.ReactNode // 提示
+  children?: React.ReactNode // 提示
 }
 
 interface IS {
@@ -106,14 +108,12 @@ class Upload extends React.Component<IP, IS> {
     console.log('---------handleBeforeUpload---------')
     const { beforeUpload } = this.props
     const { uploadFiles } = this.state
-    let p = new Promise(function(reslove,reject){
-      reslove(beforeUpload && beforeUpload(rawFile, uploadFiles))
-    })
-    return p
+    return beforeUpload && beforeUpload(rawFile, uploadFiles)
   }
 
   handleStart = (file: RcFile) => {
     console.log('---------handleStart---------')
+    const { onStart } = this.props
     file.uid = Date.now() + ''
     let rawFile: UploadFile = {
       url:'',
@@ -137,6 +137,8 @@ class Upload extends React.Component<IP, IS> {
         return;
       }
     }
+
+    onStart && onStart(rawFile, [...this.state.uploadFiles, rawFile])
 
     this.setState({
       uploadFiles: [...this.state.uploadFiles, rawFile]
@@ -255,7 +257,8 @@ class Upload extends React.Component<IP, IS> {
       httpRequest,
       limit,
       onExceed,
-      drag
+      drag,
+      children
     } = this.props
     const {
       listType,
@@ -288,7 +291,6 @@ class Upload extends React.Component<IP, IS> {
       <div>
         {listType === 'picture-card' && showFileList && uploadList }
         <UploadInput 
-          ref='uploadInner'
           name= { name }
           headers={ headers }
           action={ action }
@@ -314,6 +316,7 @@ class Upload extends React.Component<IP, IS> {
           limit= { limit }
           onExceed= { onExceed }
         ></UploadInput>
+        {children}
         { !uploadDisabled && tip}
         { listType !== 'picture-card' && showFileList && uploadList }
       </div>

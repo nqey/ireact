@@ -8,3 +8,5 @@ export { default as Col } from './col';
 export { default as Button } from './button';
 export { default as Progress } from './progress';
 export { default as Upload } from './upload';
+export { default as Step } from './steps/step';
+export { default as Steps } from './steps/steps';

@@ -1,5 +1,5 @@
 import React from 'react'
-import { UploadFile, IObj } from './interface'
+import { UploadFile } from './interface'
 import classnames from 'src/lib/utils/classnames'
 import UploadLi from './upload-li'
 
@@ -11,30 +11,24 @@ interface IP<T=any> {
   onRemove?: (file: UploadFile) => void
 }
 
-class UploadList extends React.Component<IP> {
+const UploadList: React.FC<IP> = props => {
+  const {
+    files,
+    listType,
+    disabled,
+    onPreview,
+    onRemove
+  } = props
 
-  get ulStyle() {
-    const { disabled, listType } = this.props
-    const obj:IObj = {}
+  const ulStyle = (() => {
+    const obj:any = {}
     obj['sy-upload-list'] = true
     obj['sy-upload-list--' + listType] = true
     obj['is-disabled'] = !!disabled
     return classnames(obj)
-  }
+  })()
 
-  render() {
-    const {
-      ulStyle
-    } = this
-
-    const {
-      files,
-      listType,
-      onRemove,
-      disabled,
-      onPreview
-    } = this.props
-
+  const renderUploadList = () => {
     const List = files.map((file:UploadFile, index) => {
       return (
         <UploadLi
@@ -55,6 +49,7 @@ class UploadList extends React.Component<IP> {
       </ul>
     )
   }
+  return renderUploadList()
 }
 
 export default UploadList

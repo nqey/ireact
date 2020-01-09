@@ -1,0 +1,15 @@
+@import "mixins/mixins";
+@import "common/var";
+
+@include b(editor) {
+    text-align: right;
+    @include e(phone) {
+        height: (667 * 0.7) * 1px;
+        width: (375 * 0.7) * 1px;
+        background-color: #fff;
+        display: inline-block;
+        @include m(full) {
+	        width: 100%
+        }
+    }
+}

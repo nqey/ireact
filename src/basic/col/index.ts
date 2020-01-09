@@ -25,7 +25,9 @@ interface IProps {
   lg?: number|object
   xl?: number|object
   gutter?: number
-  readonly [index: string]: any;
+  className?: string
+  readonly [index: string]: any
+
 }
 
 const Col: React.FC<IProps> = props => {
@@ -36,7 +38,8 @@ const Col: React.FC<IProps> = props => {
     pull = 0,
     push = 0,
     gutter = props.params.gutter || 0,
-    children
+    children,
+    className = ''
   } = props
 
   let classList: Array<string> = ['sy-col']
@@ -44,7 +47,6 @@ const Col: React.FC<IProps> = props => {
   classList.push(`sy-col-offset-${offset}`)
   classList.push(`sy-col-pull-${pull}`)
   classList.push(`sy-col-push-${push}`)
-
   const sizes: Array<string> = ['xs', 'sm', 'md', 'lg', 'xl']
 
   sizes.forEach(size => {
@@ -61,6 +63,8 @@ const Col: React.FC<IProps> = props => {
       })
     }
   })
+
+  classList.push(className)
 
   return React.createElement(tag, {
     className: classList.join(' '),

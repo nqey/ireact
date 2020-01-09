@@ -40,8 +40,8 @@ const Row: React.FC<IProps> = (props) => {
   obj['sy-row--flex'] = type === 'flex'
   const className = classnames(obj)
   
-  const children = slotProps.set(props.children, {
-    gutter
+  const children = slotProps.set(props.children, () => {
+    return {gutter}
   })
 
   return React.createElement(tag, {
