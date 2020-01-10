@@ -67,8 +67,8 @@ const H5editor: React.FC = () => {
         <Header>Header</Header>
         <Main>
           <Row gutter={100}>
-            <Col span={12} className="juma-editor">
-                <div className="juma-editor__phone">
+            <Col span={12} className="qc-editor">
+                <div className="qc-editor__phone">
                   {imagesArray}
                 </div>
             </Col>

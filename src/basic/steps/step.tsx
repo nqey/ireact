@@ -3,7 +3,7 @@ import classnames from 'src/lib/utils/classnames'
 
 interface IP {
   title?:string // 标题
-  description?: string // 描述性文字
+  description?: string|React.ReactNode|Element // 描述性文字
   icon?:string // 传入 icon 的 class 全名来自定义 icon，也支持 参数 方式写入
   status?: 'wait' | 'process' | 'finish' | 'error' | 'success'
   readonly [index: string]: any

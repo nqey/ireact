@@ -1,0 +1,133 @@
+@import "mixins/mixins";
+@import "common/var";
+
+
+$--resume-base-color: #d0d622;
+$--resume-label-color: #68695f;
+$--resume-label-size: 18px;
+$--resume-text-color: #636462;
+$--resume-text-size: 14px;
+$--resume-item-bottom: 15px;
+$--resume-info-padding-top: 30px;
+$--resume-info-padding-left: 15px;
+
+
+body {
+  background-color: #f4f6f9;
+}
+
+@include b(resume) {
+  width: 880px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  @include e(aside) {
+    width: 360px;
+    background-color: #2f3231;
+    position: relative;
+  }
+  @include e(profile) {
+    width: 100%;
+    height: 300px;
+    background-color: $--resume-base-color;
+    border-bottom-right-radius: 30%;
+    text-align: center;
+  }
+  @include e(info) {
+    padding-top: $--resume-info-padding-top;
+    padding-left: $--resume-info-padding-left;
+    padding-right: $--resume-info-padding-left;
+  }
+  @include e(item) {
+    margin: 0 auto $--resume-item-bottom auto;
+    width: 135px;
+    text-align: left;
+  }
+  @include e(label) {
+    color: $--resume-label-color;
+    font-size: $--resume-label-size;
+    font-weight: 500;
+  }
+  @include e(text) {
+    color: $--resume-text-color;
+    font-size: $--resume-text-size;
+  }
+  @include e(avatar) {
+    display: inline-block;
+    width: 135px;
+    height: 135px;
+    border-radius: 50%;
+    background-color: #626363;
+    text-align: center;
+    .sy-avatar {
+      margin-top: 9.5px;
+    }
+  }
+
+  @include e(main) {
+    background-color: #fff;
+  }
+
+
+}
+
+$--resume-info-font-color: #fff;
+
+@include b(resume-info) {
+  color: $--resume-info-font-color;
+  margin-bottom: 30px;
+  @include e(header) {
+    margin-bottom: 10px;
+    .sy-avatar {
+      vertical-align: middle;
+    }
+    .title {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 30px;
+      margin-left: 10px;
+    }
+  }
+  @include e(item) {
+    font-size: 12px;
+    text-indent: 40px;
+    line-height: 20px;
+  }
+
+}
+
+@include b(resume-skill) {
+  position: absolute;
+  bottom: 50px;
+  .sy-col {
+    text-align: center;
+  }
+}
+
+@include b(resume-experience) {
+  @include e(header) {
+    margin-bottom: 10px;
+    .sy-avatar {
+      vertical-align: middle;
+    }
+    .title {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 30px;
+      margin-left: 10px;
+      font-weight: bold;
+      color: #303133;
+      font-size: 18px;
+    }
+  }
+}
+
+@include when(vertical-middle) {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+

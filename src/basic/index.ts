@@ -10,3 +10,4 @@ export { default as Progress } from './progress';
 export { default as Upload } from './upload';
 export { default as Step } from './steps/step';
 export { default as Steps } from './steps/steps';
+export { default as Avatar } from './avatar';

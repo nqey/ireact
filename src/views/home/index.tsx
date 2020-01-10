@@ -13,7 +13,7 @@ import {
   Steps,
   Step
 } from 'src/basic';
-import './index.css';
+import './index.scss';
 
 function handlePreview() {
 
@@ -32,7 +32,7 @@ const dragDom = (
 ) 
 const Home: React.FC = () => {
   return (
-    <Container>
+    <Container className="test-home">
       <Aside width="200px">Aside</Aside>
       <Container direction="vertical">
         <Header>Header</Header>

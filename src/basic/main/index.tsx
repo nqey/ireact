@@ -1,8 +1,12 @@
 import React from 'react'
 
-const Main: React.FC = props => {
+interface IP {
+  className?:string
+}
+
+const Main: React.FC<IP> = props => {
   return (
-    <main className='sy-main'>
+    <main className={`sy-main ${props.className || ''}`}>
         {props.children}
     </main>
   )

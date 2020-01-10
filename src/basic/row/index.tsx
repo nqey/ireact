@@ -22,6 +22,7 @@ interface IProps {
   type?: string
   justify?: 'start'|'end'|'center'|'space-around'|'space-between'
   align?: 'top'|'middle'|'bottom'
+  className?: string
 }
 
 const Row: React.FC<IProps> = (props) => {
@@ -31,6 +32,7 @@ const Row: React.FC<IProps> = (props) => {
     type,
     justify = 'start',
     align = 'top',
+    className
   } = props
 
   const obj: any = {}
@@ -38,14 +40,15 @@ const Row: React.FC<IProps> = (props) => {
   obj[`is-justify-${justify}`] = justify !== 'start'
   obj[`is-align-${align}`] = align !== 'top'
   obj['sy-row--flex'] = type === 'flex'
-  const className = classnames(obj)
+  if (!!className) obj[className] = true
+  const rowClassList = classnames(obj)
   
   const children = slotProps.set(props.children, () => {
     return {gutter}
   })
 
   return React.createElement(tag, {
-    className,
+    className: rowClassList,
     style: style(gutter),
   }, children);
 }
