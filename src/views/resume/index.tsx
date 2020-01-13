@@ -72,7 +72,7 @@ const Experience: React.FC<IPE> = (props) => {
         <Avatar size={30} src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></Avatar>
         <span className="title">{title}</span>
       </div>
-      <Steps direction="vertical" space={100}>
+      <Steps direction="vertical">
         { doms }
       </Steps>
     </div>
@@ -265,34 +265,29 @@ const Resume: React.FC = () => {
           ]}/>
         </div>
         <Row className="qc-resume-skill">
-          <Col span={12}>
-            <Progress type="dashboard" percentage={70} color="#d0d622" format={() => {
+          <Col span={24}>
+            <Progress type="line" percentage={80} color="#d623c7" format={() => {
               return 'vue 熟练'
             }}></Progress>
           </Col>
-          <Col span={12}>
-            <Progress type="dashboard" percentage={70} color="#d0d622" format={() => {
-              return 'vue 熟练'
+          <Col span={24}>
+            <Progress type="line" percentage={80} color="#d623c7" format={() => {
+              return 'react 熟练'
             }}></Progress>
           </Col>
-          <Col span={12}>
-            <Progress type="dashboard" percentage={70} color="#d0d622" format={() => {
-              return 'vue 熟练'
+           <Col span={24}>
+            <Progress type="line" percentage={50} color="green" format={() => {
+              return 'angular 一般'
             }}></Progress>
           </Col>
-          <Col span={12}>
-            <Progress type="dashboard" percentage={70} color="#d0d622" format={() => {
-              return 'vue 熟练'
+          <Col span={24}>
+            <Progress type="line" percentage={70} color="#d0d622" format={() => {
+              return 'webpack 熟练'
             }}></Progress>
           </Col>
-          <Col span={12}>
-            <Progress type="dashboard" percentage={70} color="#d0d622" format={() => {
-              return 'vue 熟练'
-            }}></Progress>
-          </Col>
-          <Col span={12}>
-            <Progress type="dashboard" percentage={70} color="#d0d622" format={() => {
-              return 'vue 熟练'
+          <Col span={24}>
+            <Progress type="line" percentage={90} color="red" format={() => {
+              return 'es6 精通'
             }}></Progress>
           </Col>
         </Row>

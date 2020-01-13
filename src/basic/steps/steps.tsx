@@ -16,7 +16,7 @@ interface IP {
 
 const Steps: React.FC<IP> = props => {
   const {
-    space = 0,
+    space = '',
     direction = 'horizontal',
     active = 0,
     stepOffset = 0,
