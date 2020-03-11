@@ -11,3 +11,5 @@ export { default as Upload } from './upload';
 export { default as Step } from './steps/step';
 export { default as Steps } from './steps/steps';
 export { default as Avatar } from './avatar';
+export { default as Collapse } from './collapse/index';
+export { default as CollapseItem } from './collapse/item';

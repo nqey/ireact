@@ -90,6 +90,15 @@ $--resume-info-font-color: #fff;
       margin-left: 10px;
     }
   }
+  @include e(text) {
+    a {
+      color: $--resume-info-font-color;
+    }
+    img {
+      width: 19px;
+      vertical-align: middle;
+    }
+  }
   @include e(item) {
     font-size: 12px;
     text-indent: 40px;
@@ -101,6 +110,7 @@ $--resume-info-font-color: #fff;
 @include b(resume-skill) {
   position: absolute;
   bottom: 50px;
+  overflow: hidden;
   .sy-col {
     text-align: center;
   }
@@ -120,6 +130,11 @@ $--resume-info-font-color: #fff;
       font-weight: bold;
       color: #303133;
       font-size: 18px;
+    }
+  }
+  @include e(steps) {
+    p {
+      margin: 3px 0px;
     }
   }
 }

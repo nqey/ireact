@@ -11,10 +11,10 @@ interface IP {
   width?: number // 环形进度条画布宽度（只在 type 为 circle 或 dashboard 时可用）
   strokeLinecap?: 'butt'|'round'|'square' // circle/dashboard 类型路径两端的形状
   showText?: boolean // 是否显示进度条文字内容
-  format?: (param:any) => string
+  format?: (param:any) => string|React.ReactNode
 }
 
-const Progress: React.FC<IP> = props => {
+const Progress: React.FC<IP> = (props) => {
   const {
     type = 'line',
     percentage = 0,

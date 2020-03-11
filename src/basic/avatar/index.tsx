@@ -47,7 +47,8 @@ const Avatar: React.FC<IProps> = props => {
   const sizeStyle = typeof size === 'number' ? {
     height: `${size}px`,
     width: `${size}px`,
-    lineHeight: `${size}px`
+    lineHeight: `${size}px`,
+    fontSize: `${size-5}px`
   } : {};
 
   function handleError(e:React.SyntheticEvent) {
@@ -68,7 +69,7 @@ const Avatar: React.FC<IProps> = props => {
     }
 
     if (icon) {
-      return (<i className={icon} />);
+      return (<i className={icon}/>);
     }
 
     return children;

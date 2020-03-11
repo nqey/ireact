@@ -11,6 +11,7 @@ interface IP {
   center?: boolean // 进行居中对齐
   simple?: boolean // 是否应用简洁风格
   stepOffset?: number|string // 简洁风格生效
+  className?: string
   children: React.ReactNode
 }
 
@@ -24,6 +25,7 @@ const Steps: React.FC<IP> = props => {
     finishStatus = 'finish',
     center = false,
     simple = false,
+    className = '',
     children
   } = props
   
@@ -72,6 +74,7 @@ const Steps: React.FC<IP> = props => {
     obj['sy-steps'] = true
     obj[`sy-steps--${direction}`] = !simple
     obj['sy-steps--simple'] = !!simple
+    obj[className] = true
     return classnames(obj)
   })()
 
