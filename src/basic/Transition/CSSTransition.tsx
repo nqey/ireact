@@ -1,5 +1,4 @@
 import addOneClass from 'dom-helpers/addClass';
-
 import removeOneClass from 'dom-helpers/removeClass';
 import React from 'react';
 

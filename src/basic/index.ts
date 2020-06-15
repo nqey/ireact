@@ -13,3 +13,7 @@ export { default as Steps } from './steps/steps';
 export { default as Avatar } from './avatar';
 export { default as Collapse } from './collapse/index';
 export { default as CollapseItem } from './collapse/item';
+export { default as Card } from './card';
+export { default as Divider } from './divider';
+export { default as Drawer } from './drawer';
+export { default as Icon } from './icon';

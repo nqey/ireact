@@ -102,12 +102,49 @@
   }
 }
 
+
+@mixin drawer-postion-fixed($direction) {
+  @if $direction == ltr {
+    &.#{$direction} {
+      right: auto;
+    }
+  }
+
+  @if $direction == rtl {
+    &.#{$direction} {
+      left: auto;
+    }
+  }
+
+  @if $direction == ttb {
+    &.#{$direction} {
+      bottom: auto;
+    }
+  }
+
+  @if $direction == btt {
+    &.#{$direction} {
+      top:auto;
+    }
+  }
+
+  @if $direction == full {
+    &.#{$direction} {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
+
 @include drawer-animation(rtl);
 @include drawer-animation(ltr);
 @include drawer-animation(ttb);
 @include drawer-animation(btt);
 
 $directions: rtl, ltr, ttb, btt;
+$size: full;
 
 @include b(drawer) {
   position: absolute;
@@ -131,8 +168,12 @@ $directions: rtl, ltr, ttb, btt;
     right: 0;
     bottom: 0;
     left: 0;
-    overflow: hidden;
+    /*overflow: hidden;*/
     margin: 0;
+    @each $direction in $directions {
+      @include drawer-postion-fixed($direction);
+    }
+    @include drawer-postion-fixed($size);
   }
 
   &__header {
@@ -196,6 +237,10 @@ $directions: rtl, ltr, ttb, btt;
   &.btt {
     bottom: 0;
   }
+
+  &.full {
+    width: 100%
+  }
 }
 
 .sy-drawer__container {
@@ -212,6 +257,6 @@ $directions: rtl, ltr, ttb, btt;
   animation: sy-drawer-fade-in .3s;
 }
 
-.sy-drawer-fade-leave-active {
+.sy-drawer-fade-exit-active {
   animation: sy-drawer-fade-in .3s reverse;
 }

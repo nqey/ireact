@@ -1,5 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import TransitionGroupContext from './TransitionGroupContext'
+
+import config from './config'
 
 export const UNMOUNTED = 'unmounted'
 export const EXITED = 'exited'
@@ -101,6 +104,8 @@ export const EXITING = 'exiting'
 
 const defaultProps = {
   in: false,
+  mountOnEnter: false,
+  unmountOnExit: false,
   appear: false,
   enter: true,
   exit: true,
@@ -120,6 +125,8 @@ interface Itimeout {
 interface IP {
   children: any // 某个状态下需要过渡效果的目标组件，可以是函数（“ entering”，“ entered”，`'exiting'`，`'exited'`）
   in:boolean // 用于在enter与exit状态之间转换，默认为false，表示不挂载组件或者处于exit状态。
+  mountOnEnter: boolean // 在第一次in={true}即挂载的时候，设置mountOnEnter={true}表示延迟挂载，懒加载组件。
+  unmountOnExit: boolean // 如果为true，在组件处于exited状态的时候，卸载组件。
   appear:boolean // 如果为true，在组件挂载的时候，展示过渡动画。默认为false，第一次挂载过渡动画不生效。
   enter:boolean // 如果为true，表示允许enter状态的过渡动画生效，默认为true
   exit:boolean // 如果为true，表示允许exit状态的过渡动画生效，默认为true
@@ -129,9 +136,9 @@ interface IP {
   onEntering: (node:any, appearing:boolean) => void // 进入中回调
   onEntered: (node:any, appearing:boolean) => void // 进入结束回调
 
-  onExit: (node:any) => void // 退出回调
-  onExiting: (node:any) => void // 退出中回调
-  onExited: (node:any) => void // 退出结束回调
+  onExit: (node:any, appearing:boolean) => void // 退出回调
+  onExiting: (node:any, appearing:boolean) => void // 退出中回调
+  onExited: (node:any, appearing:boolean) => void // 退出结束回调
 };
 
 interface IS {
@@ -149,18 +156,30 @@ class Transition extends React.Component<IP, IS> {
 
   constructor(props:IP, context:any) {
     super(props, context)
-    console.log('constructor');
+
+    let parentGroup = context
+    // 有父组件且父组件挂载完毕，则所有子组件开始进入
+    let appear:boolean|undefined =
+      parentGroup && !parentGroup.isMounting ? props.enter : props.appear
+
     let initialStatus
+
     this.appearStatus = null
 
     if (props.in) {
-      if (props.appear) {
+      if (appear) {
         // 第一次挂载动画生效
         this.appearStatus = ENTERING
+        initialStatus = EXITED
+      } else {
+        initialStatus = ENTERED
       }
-      initialStatus = ENTERED
     } else {
-      initialStatus = EXITED
+      if (props.unmountOnExit || props.mountOnEnter) {
+        initialStatus = UNMOUNTED
+      } else {
+        initialStatus = EXITED
+      }
     }
 
     this.state = { status: initialStatus }
@@ -171,12 +190,10 @@ class Transition extends React.Component<IP, IS> {
   // 组件第一次渲染完成，此时dom节点已经生成
   componentDidMount() {
     // 第一次挂载的时候，如果in = true && appear = true，则appearStatus=ENTERING动画生效，否则为null。
-    console.log('第一次渲染完成 挂载');
     this.updateStatus(true, this.appearStatus)
   }
 
   componentDidUpdate(prevProps:IP) {
-    console.log('更新挂载状态');
     let nextStatus = null
     if (prevProps !== this.props) {
       const { status } = this.state
@@ -199,7 +216,6 @@ class Transition extends React.Component<IP, IS> {
   }
 
   static getDerivedStateFromProps(nextProps:IP, prevState:IS) {
-    console.log('更新阶段', prevState.status);
     // 更新阶段：
     // 如果挂载阶段in=true,上一次显示未挂载则状态更新为退出
     if (nextProps.in && prevState.status === UNMOUNTED) {
@@ -209,7 +225,6 @@ class Transition extends React.Component<IP, IS> {
   }
 
   componentWillUnmount() {
-    // 卸载前取消过度动画
     this.cancelNextCallback()
   }
 
@@ -234,21 +249,18 @@ class Transition extends React.Component<IP, IS> {
 
   updateStatus(mounting = false, nextStatus: string|null) {
     if (nextStatus) {
-      // 取消上次动画
-      this.cancelNextCallback()
+      // nextStatus will always be ENTERING or EXITING.
+      this.cancelNextCallback() // 挂载阶段无操作
+      const node = ReactDOM.findDOMNode(this) // 挂载阶段找到真实DOM
 
-      // 获取执行动画的DOM
-      const node = ReactDOM.findDOMNode(this)
-
+      // 更新阶段nextStatus只有两种状态ENTERING与EXITING
+      // 如果为ENTERING执行入场，EXITING执行退场
       if (nextStatus === ENTERING) {
-        // 入场动画
         this.performEnter(node!, mounting)
       } else {
-        // 退场动画
         this.performExit(node!)
       }
-    } else if (this.state.status === EXITED) {
-      // 退场后卸载dom
+    } else if (this.props.unmountOnExit && this.state.status === EXITED) {
       this.setState({ status: UNMOUNTED })
     }
   }
@@ -260,33 +272,31 @@ class Transition extends React.Component<IP, IS> {
   // --> 执行onEntered回调函数
   performEnter(node:any, mounting:boolean) {
     const { enter } = this.props
-    //  第一次挂在执行appear动画，否则执行enter动画
-    const appearing = mounting;
+    //  挂载阶段：如果in = true && appear = true，则appearing = true
+    const appearing = this.context ? this.context.isMounting : mounting
 
     const timeouts = this.getTimeouts()
-    const enterTimeout:number = mounting ? timeouts.appear : timeouts.enter
-    // 跳过动画直接结束
-    if (!mounting && !enter) {
+    const enterTimeout:number = appearing ? timeouts.appear : timeouts.enter
+    // no enter animation skip right to ENTERED
+    // if we are mounting and running this it means appear _must_ be set
+    if ((!mounting && !enter) || config.disabled) {
       this.safeSetState({ status: ENTERED }, () => {
         this.props.onEntered(node!, false)
       })
       return
     }
 
-    // 入场开始 设置入场样式
     this.props.onEnter(node, appearing)
 
-    // 入场中
+    // 改变{ status: ENTERING }，改变之后执行一次回调函数
     this.safeSetState({ status: ENTERING }, () => {
-      // 设置入场中样式
+      // 将状态设置为ENTERING之后，开始执行过渡动画
       this.props.onEntering(node, appearing)
 
       // timeouts.enter为入场enter的持续时间
-      // enter持续时间后过渡动画结束
+      // 过渡动画结束，设置{ status: ENTERED }，执行onEntered回调函数
       this.onTransitionEnd(node, enterTimeout, () => {
-        // 入场结束
         this.safeSetState({ status: ENTERED }, () => {
-          // 设置入场结束样式
           this.props.onEntered(node, appearing)
         })
       })
@@ -297,22 +307,21 @@ class Transition extends React.Component<IP, IS> {
     const { exit } = this.props
     const timeouts = this.getTimeouts()
 
-    // 跳过退场过渡动画
-    if (!exit) {
+    // no exit animation skip right to EXITED
+    if (!exit || config.disabled) {
       this.safeSetState({ status: EXITED }, () => {
-        this.props.onExited(node)
+        this.props.onExited(node, false)
       })
       return
     }
-
-    this.props.onExit(node)
+    this.props.onExit(node, false)
 
     this.safeSetState({ status: EXITING }, () => {
-      this.props.onExiting(node)
+      this.props.onExiting(node, false)
 
       this.onTransitionEnd(node, timeouts.exit, () => {
         this.safeSetState({ status: EXITED }, () => {
-          this.props.onExited(node)
+          this.props.onExited(node, false)
         })
       })
     })
@@ -371,15 +380,15 @@ class Transition extends React.Component<IP, IS> {
   }
   render() {
     const status = this.state.status
-    // 未挂载
     if (status === UNMOUNTED) {
-      console.log('未挂载');
       return null
     }
-    console.log('挂载');
+
     const { children, ...childProps } = this.props
     // filter props for Transtition
     delete childProps.in
+    delete childProps.mountOnEnter
+    delete childProps.unmountOnExit
     delete childProps.appear
     delete childProps.enter
     delete childProps.exit
@@ -392,8 +401,22 @@ class Transition extends React.Component<IP, IS> {
     delete childProps.onExiting
     delete childProps.onExited
 
+    if (typeof children === 'function') {
+      // allows for nested Transitions
+      return (
+        <TransitionGroupContext.Provider value={null}>
+          {children(status, childProps)}
+        </TransitionGroupContext.Provider>
+      )
+    }
+
     const child = React.Children.only(children)
-    return React.cloneElement(child, childProps)
+    return (
+      // allows for nested Transitions
+      <TransitionGroupContext.Provider value={null}>
+        {React.cloneElement(child, childProps)}
+      </TransitionGroupContext.Provider>
+    )
   }
 }
 

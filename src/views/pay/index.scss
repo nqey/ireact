@@ -1,0 +1,124 @@
+.pay-flex-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: start;
+  .item {
+    padding: 5%;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      display: flex;
+      align-items: center;
+      img {
+        width: 24px;
+        margin-right: 10px;
+      }
+      span {
+        font-size: 14px;
+        color: #242526;
+        line-height: 14px;
+      }
+    }
+    i {
+      color: #B6B9BF;
+      font-size: 14px;
+    }
+  }
+  .amount {
+    font-size: 14px;
+    color: #242526;
+    line-height: 14px;
+  }
+}
+
+.pay-flex-row {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .amount {
+    font-size: 14px;
+    color: #242526;
+    line-height: 14px;
+  }
+}
+
+.pay-name-m {
+  font-size: 18px;
+  color: #242526;
+  line-height: 26px;
+}
+
+.pay-name-c {
+  font-size: 14px;
+  color: #85888C;
+  line-height: 22px;
+}
+
+.pay-name-b {
+  /*margin-top: 18px;*/
+  margin-bottom: 20px;
+}
+
+.sy-card {
+  .plateNumber {
+    font-size: 14px;
+    color: #242526;
+    line-height: 14px;
+  }
+  p {
+    font-size: 12px;
+    color: #85888C;
+    line-height: 12px;
+  }
+  .label {
+    font-size: 14px;
+    color: #85888C;
+    line-height: 14px;
+  }
+  .amount {
+    font-size: 14px;
+    color: #121300;
+    line-height: 14px;
+  }
+}
+
+.sy-drawer__body {
+  p {
+    /*margin: 0;*/
+    font-size: 12px;
+    color: #85888C;
+  }
+  h4 {
+    /*margin: 0;*/
+    font-size: 14px;
+  }
+  .sy-divider {
+    /*margin: 0;*/
+  }
+}
+
+.pay-msg-box {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  h3 {
+    font-size: 22px;
+    color: #000000;
+    line-height: 22px;
+  }
+  p {
+    font-size: 14px;
+    color: #4A4A4A;
+    line-height: 20px;
+  }
+}

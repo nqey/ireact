@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'src/theme-chalk/src/index.scss';
-import { HashRouter, Router, Switch, Route } from 'react-router-dom'
+import './theme-chalk/src/index.scss';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
